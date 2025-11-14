@@ -2,46 +2,79 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Reservation Access</title>
+    <title>Naisho Room Reservation Access</title>
 
     <style>
       body {
-        font-family: Arial, sans-serif;
-        background: #f8f8f8;
-        padding: 40px;
+        font-family: Urbanist, Roboto, Arial, sans-serif;
+        background: #fafafa;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
       }
-      #login {
-        max-width: 300px;
-        margin: auto;
+
+      #container {
+        text-align: center;
+        width: 100%;
+        max-width: 350px;
+        padding: 20px;
       }
-      #widget {
-        display: none;
-        margin-top: 30px;
+
+      h2 {
+        margin-bottom: 20px;
+        font-size: 22px;
       }
+
       input {
         width: 100%;
-        padding: 10px;
-        margin-top: 10px;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
       }
+
       button {
         width: 100%;
-        padding: 10px;
-        margin-top: 10px;
+        padding: 12px;
         background: black;
         color: white;
+        border: none;
+        font-size: 16px;
         cursor: pointer;
+        margin-top: 10px;
+        border-radius: 4px;
       }
+
+      button:hover {
+        opacity: 0.9;
+      }
+
       #error {
         color: red;
         margin-top: 10px;
+        min-height: 20px;
+      }
+
+      #widget {
+        margin-top: 30px;
+        display: none;
+      }
+
+      iframe {
+        margin: 0 auto;
+        display: block;
       }
     </style>
   </head>
   <body>
     <div id="login">
-      <h2>Enter Password to Continue</h2>
+      <h2>What's the Password?</h2>
       <input id="passwordInput" type="password" placeholder="Password" />
-      <button onclick="checkPassword()">Submit</button>
+      <button onclick="checkPassword()">Let Me In</button>
       <div id="error"></div>
     </div>
 
