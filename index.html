@@ -12,7 +12,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
+        min-height: 300px;
       }
 
       #container {
@@ -46,6 +46,7 @@
         color: #04070c;
         border: none;
         font-size: 16px;
+        font-weight: 500;
         font-family: Urbanist, Roboto, Arial, sans-serif;
         cursor: pointer;
         margin-top: 10px;
@@ -70,6 +71,22 @@
       iframe {
         margin: 0 auto;
         display: block;
+      }
+
+      #login {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        margin-top: 40px;
+      }
+
+      /* Make the input and button the same max width */
+      #login input,
+      #login button {
+        width: 100%;
+        max-width: 320px;
+        box-sizing: border-box;
       }
     </style>
   </head>
