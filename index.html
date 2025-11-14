@@ -1,84 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Reservation Access</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Reservation Access</title>
 
-<style>
-  body { font-family: Arial, sans-serif; background: #f8f8f8; padding: 40px; }
-  #login { max-width: 300px; margin: auto; }
-  #widget { display: none; margin-top: 30px; }
-  input { width: 100%; padding: 10px; margin-top: 10px; }
-  button { width: 100%; padding: 10px; margin-top: 10px; background: black; color: white; cursor: pointer; }
-  #error { color: red; margin-top: 10px; }
-</style>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f8f8f8;
+        padding: 40px;
+      }
+      #login {
+        max-width: 300px;
+        margin: auto;
+      }
+      #widget {
+        display: none;
+        margin-top: 30px;
+      }
+      input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        background: black;
+        color: white;
+        cursor: pointer;
+      }
+      #error {
+        color: red;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="login">
+      <h2>Enter Password to Continue</h2>
+      <input id="passwordInput" type="password" placeholder="Password" />
+      <button onclick="checkPassword()">Submit</button>
+      <div id="error"></div>
+    </div>
 
-</head>
-<body>
+    <div id="widget"></div>
 
-<div id="login">
-  <h2>Enter Password to Continue</h2>
-  <input id="passwordInput" type="password" placeholder="Password">
-  <button onclick="checkPassword()">Submit</button>
-  <div id="error"></div>
-</div>
+    <script>
+      // Use your working URL including the ?key=SECRET
+      const appsScriptURL =
+        "https://script.google.com/macros/s/AKfycby2owR8eboHsdiJtjlmOA7SkP4bj0-jzre_AHITdfCLVUGW1v4jD-oL-Kk3sTX9GkA/exec?key=kMHSXX9NZD";
 
-<div id="widget"></div>
+      let remotePassword = null;
 
-<script>
-// Use your working URL including the ?key=SECRET
-const appsScriptURL = "https://script.google.com/macros/s/AKfycby2owR8eboHsdiJtjlmOA7SkP4bj0-jzre_AHITdfCLVUGW1v4jD-oL-Kk3sTX9GkA/exec?key=kMHSXX9NZD";
+      // Fetch password from Apps Script backend
+      async function loadPassword() {
+        try {
+          const response = await fetch(appsScriptURL);
+          const data = await response.json();
+          if (data.password) {
+            remotePassword = data.password.trim();
+          } else {
+            document.getElementById("error").textContent =
+              "System error. Try again.";
+          }
+        } catch (err) {
+          console.error("Error fetching password:", err);
+          document.getElementById("error").textContent = "System error.";
+        }
+      }
 
-let remotePassword = null;
+      // Validate password
+      function checkPassword() {
+        if (!remotePassword) {
+          document.getElementById("error").textContent =
+            "Still loading. Try again in a moment.";
+          return;
+        }
 
-// Fetch password from Apps Script backend
-async function loadPassword() {
-  try {
-    const response = await fetch(appsScriptURL);
-    const data = await response.json();
-    if (data.password) {
-      remotePassword = data.password.trim();
-    } else {
-      document.getElementById("error").textContent = "System error. Try again.";
-    }
-  } catch (err) {
-    console.error("Error fetching password:", err);
-    document.getElementById("error").textContent = "System error.";
-  }
-}
+        const userInput = document.getElementById("passwordInput").value.trim();
 
-// Validate password
-function checkPassword() {
-  if (!remotePassword) {
-    document.getElementById("error").textContent = "Still loading. Try again in a moment.";
-    return;
-  }
+        if (userInput === remotePassword) {
+          document.getElementById("login").style.display = "none";
+          loadWidget();
+        } else {
+          document.getElementById("error").textContent = "Incorrect password.";
+        }
+      }
 
-  const userInput = document.getElementById("passwordInput").value.trim();
-
-  if (userInput === remotePassword) {
-    document.getElementById("login").style.display = "none";
-    loadWidget();
-  } else {
-    document.getElementById("error").textContent = "Incorrect password.";
-  }
-}
-
-// Load widget only after password match
-function loadWidget() {
-  const widgetHTML = `
+      // Load widget only after password match
+      function loadWidget() {
+        const widgetHTML = `
     <iframe 
-      src="https://www.opentable.com/widget/reservation/mural?rid=1413745&type=standard&color=8&dark=false&iframe=true" 
-      width="288" height="490" frameborder="0" scrolling="no">
+        data-test="reservation-widget-iframe"
+        src="https://www.opentable.com/widget/reservation/mural?rid=1413745&type=standard&color=8&dark=false&iframe=true&domain=com&lang=en-US&newtab=false&ot_source=Instagram&font=centuryGothic&ot_logo=subtle&primary_color=e4e6e7&primary_font_color=333333&button_color=bc8c4e&button_font_color=ffffff&cfe=true&uuid=33b74dd1-085f-4b98-9d7e-b214901074d09&theme=tall"
+        width="288"
+        height="490"
+        frameborder="0"
+        scrolling="no"
+        name="opentable-make-reservation-widget"
+        title="OpenTable make reservation widget">
     </iframe>
-  `;
-  document.getElementById("widget").innerHTML = widgetHTML;
-  document.getElementById("widget").style.display = "block";
-}
+    `;
 
-// Load password on startup
-loadPassword();
-</script>
+        document.getElementById("widget").innerHTML = widgetHTML;
+        document.getElementById("widget").style.display = "block";
+      }
 
-</body>
+      // Load password on startup
+      loadPassword();
+    </script>
+  </body>
 </html>
